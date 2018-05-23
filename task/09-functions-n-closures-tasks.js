@@ -2,7 +2,7 @@
 
 /**********************************************************************************************
  *                                                                                            *
- * Перед началом работы с заданием, пожалуйста ознакомьтесь с туториалом:                     *
+ * Plese read the following tutorial before implementing tasks:                               *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions                    *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function  *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments      *
@@ -12,11 +12,10 @@
 
 
 /**
- *  Возвращает функцию, которая является композицией двух заданных функций f (x) и g (x).
- *  Результатом должена быть функцией одного аргумента (позволяет вызывать аргумент x),
- *  который работает как применение функции f к результату применения функции g к x, т.е.
- *  getComposition (f, g) (x) = f (g (x))
- *
+ * Returns the functions composition of two specified functions f(x) and g(x).
+ * The result of compose is to be a function of one argument, (lets call the argument x),
+ * which works like applying function f to the result of applying function g to x, i.e.
+ *  getComposition(f,g)(x) = f(g(x))
  *
  * @param {Function} f
  * @param {Function} g
@@ -27,12 +26,12 @@
  *
  */
 function getComposition(f,g) {
-    throw new Error('Not implemented');
+    return x => f(g(x));
 }
 
 
 /**
- * Возвращает функцию возведения в степень для переданного аргумента
+ * Returns the math power function with the specified exponent
  *
  * @param {number} exponent
  * @return {Function}
@@ -48,13 +47,13 @@ function getComposition(f,g) {
  *
  */
 function getPowerFunction(exponent) {
-    throw new Error('Not implemented');
+    return x => Math.pow(x, exponent);
 }
 
 
 /**
- * Возвращает полином на основании переданных аргументов
- * Подробнее: https://en.wikipedia.org/wiki/Polynomial#Definition
+ * Returns the polynom function of one argument based on specified coefficients.
+ * See: https://en.wikipedia.org/wiki/Polynomial#Definition
  *
  * @params {integer}
  * @return {Function}
@@ -66,34 +65,39 @@ function getPowerFunction(exponent) {
  *   getPolynom()      => null
  */
 function getPolynom() {
-    throw new Error('Not implemented');
+    return !arguments.length ? null :
+        (x) => Array.from(arguments).reduce(
+            (acc, elem, index) => acc + elem * Math.pow(x, arguments.length - 1 - index), 0);
 }
 
 
 /**
- * Заменяет переданную функцию и возвращает функцию,
- * которая в первый раз вызывает переданную функцию, а затем всегда возвращает результат кэширования.
+ * Memoizes passed function and returns function
+ * which invoked first time calls the passed function and then always returns cached result.
  *
- * @params {Function} func - функция для запонимания
- * @return {Function} запомненная функция
+ * @params {Function} func - function to memoize
+ * @return {Function} memoized function
  *
  * @example
  *   var memoizer = memoize(() => Math.random());
- *   memoizer() => любое рандомное число (при первом запуске вычисляется Math.random())
- *   memoizer() => тоже раномное число (при втором запуске возвращается закешированный результат)
+ *   memoizer() => some random number  (first run, evaluates the result of Math.random())
+ *   memoizer() => the same random number  (second run, returns the previous cached result)
  *   ...
- *   memoizer() => тоже рандомное число  (при всех последующих вызовах возвращается тоже закешированный результат)
+ *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
 function memoize(func) {
-    throw new Error('Not implemented');
+    let result = func();
+
+    return () => result;
 }
 
 
 /**
- * Возвращает функцию, которая пытаеся вызвать переданную функцию, и,
- * если она выбрасывает ошибку, повторяет вызов функции заданное количество раз.
- * @param {Function} функция
- * @param {number} количество попыток
+ * Returns the function trying to call the passed function and if it throws,
+ * retrying it specified number of attempts.
+ *
+ * @param {Function} func
+ * @param {number} attempts
  * @return {Function}
  *
  * @example
@@ -104,20 +108,32 @@ function memoize(func) {
  * retryer() => 2
  */
 function retry(func, attempts) {
-    throw new Error('Not implemented');
+    return function () {
+        let tryCounter = 0;
+        while (tryCounter < attempts) {
+            try {
+                return func();
+            } catch (e) {
+                if (tryCounter++ >= attempts) {
+                    throw e;
+                }
+            }
+        }
+    }
 }
 
 
 /**
- * Возвращает логирующую обертку для указанного метода,
- * Logger должен логировать начало и конец вызова указанной функции.
- * Logger должен логировать аргументы вызываемой функции.
- * Формат вывода:
+ * Returns the logging wrapper for the specified method,
+ * Logger has to log the start and end of calling the specified function.
+ * Logger has to log the arguments of invoked function.
+ * The fromat of output log is:
  * <function name>(<arg1>, <arg2>,...,<argN>) starts
  * <function name>(<arg1>, <arg2>,...,<argN>) ends
- * 
- * @param {Function} функция
- * @param {Function} логирующая функция - функия для вывода логов с однис строковым аргументом
+ *
+ *
+ * @param {Function} func
+ * @param {Function} logFunc - function to output log with single string argument
  * @return {Function}
  *
  * @example
@@ -131,12 +147,21 @@ function retry(func, attempts) {
  *
  */
 function logger(func, logFunc) {
-    throw new Error('Not implemented');
+    return function() {
+        let funcName = `${func.name}(${JSON.stringify(Array.from(arguments)).slice(1, -1)})`;
+
+        logFunc(`${funcName} starts`);
+        let result = func.apply(this, arguments);
+        logFunc(`${funcName} ends`);
+
+        return result;
+    }
 }
 
 
 /**
- * Возвращает фуункцию с частично примененными аргументами
+ * Return the function with partial applied arguments
+ *
  * @param {Function} fn
  * @return {Function}
  *
@@ -148,14 +173,18 @@ function logger(func, logFunc) {
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
 function partialUsingArguments(fn) {
-    throw new Error('Not implemented');
+    let argsPart = Array.from(arguments).slice(1);
+
+    return function () {
+        return fn.apply(this, argsPart.concat(Array.from(arguments)));
+    }
 }
 
 
 /**
- * Возвращает функцию IdGenerator, которая возвращает следующее целое число при каждом вызове начиная с переданного
+ * Returns the id generator function that returns next integer starting from specified number every time when invoking.
  *
- * @param {Number} стартовое число
+ * @param {Number} startFrom
  * @return {Function}
  *
  * @example
@@ -169,7 +198,7 @@ function partialUsingArguments(fn) {
  *   getId10() => 11
  */
 function getIdGeneratorFunction(startFrom) {
-    throw new Error('Not implemented');
+    return () => startFrom++;
 }
 
 

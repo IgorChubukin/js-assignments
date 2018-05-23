@@ -2,7 +2,7 @@
 
 /**************************************************************************************************
  *                                                                                                *
- * Перед началом работы с заданием, пожалуйста ознакомьтесь с туториалом:                         *
+ * Plese read the following tutorial before implementing tasks:                                   *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object        *
  *                                                                                                *
@@ -10,8 +10,7 @@
 
 
 /**
- * Возвращает объект Прямоугольник (rectangle) с параметрами высота (height) и ширина (width)
- * и методом getArea(), который возвращает площадь
+ * Returns the rectagle object with width and height parameters and getArea() method
  *
  * @param {number} width
  * @param {number} height
@@ -24,12 +23,17 @@
  *    console.log(r.getArea());   // => 200
  */
 function Rectangle(width, height) {
-    throw new Error('Not implemented');
+    this.width = width;
+    this.height = height;
+}
+
+Rectangle.prototype.getArea = function () {
+    return this.width * this.height;
 }
 
 
 /**
- * Возвращает JSON представление объекта
+ * Returns the JSON representation of specified object
  *
  * @param {object} obj
  * @return {string}
@@ -39,12 +43,12 @@ function Rectangle(width, height) {
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
 function getJSON(obj) {
-    throw new Error('Not implemented');
+    return JSON.stringify(obj);
 }
 
 
 /**
- * Возвращает объект указанного типа из представления JSON
+ * Returns the object of specified type from JSON representation
  *
  * @param {Object} proto
  * @param {string} json
@@ -55,34 +59,32 @@ function getJSON(obj) {
  *
  */
 function fromJSON(proto, json) {
-    throw new Error('Not implemented');
+    return Object.setPrototypeOf(JSON.parse(json), proto);
 }
 
 
 /**
- * Создатель css селекторов
+ * Css selectors builder
  *
- * Каждый комплексый селектор может состоять из эелемента, id, класса, атрибута, псевдо-класса и
- * псевдо-элемента
+ * Each complex selector can consists of type, id, class, attribute, pseudo-class and pseudo-element selectors:
  *
  *    element#id.class[attr]:pseudoClass::pseudoElement
  *              \----/\----/\----------/
- *              Может быть несколько вхождений
+ *              Can be several occurences
  *
- * Любые варианты селекторов могут быть скомбинированы с помощью ' ','+','~','>' .
+ * All types of selectors can be combined using the combinators ' ','+','~','>' .
  *
- * Задача состоит в том, чтобы создать отдельный класс, независимые классы или
- * иерархию классов и реализовать функциональность
- * для создания селекторов css с использованием предоставленного cssSelectorBuilder.
- * Каждый селектор должен иметь метод stringify ()
- * для вывода строкового представления в соответствии с спецификацией css.
+ * The task is to design a single class, independent classes or classes hierarchy and implement the functionality
+ * to build the css selectors using the provided cssSelectorBuilder.
+ * Each selector should have the stringify() method to output the string repsentation according to css specification.
  *
- * Созданный cssSelectorBuilder должен использоваться как фасад
- * только для создания ваших собственных классов,
- * например, первый метод cssSelectorBuilder может быть таким:
+ * Provided cssSelectorBuilder should be used as facade only to create your own classes,
+ * for example the first method of cssSelectorBuilder can be like this:
+ *   element: function(value) {
+ *       return new MySuperBaseElementSelector(...)...
+ *   },
  *
- * Дизайн класса(ов) полностью зависит от вас,
- * но постарайтесь сделать его максимально простым, понятным и читаемым насколько это возможно.
+ * The design of class(es) is totally up to you, but try to make it as simple, clear and readable as possible.
  *
  * @example
  *
@@ -106,39 +108,166 @@ function fromJSON(proto, json) {
  *      )
  *  ).stringify()        =>    'div#main.container.draggable + table#data ~ tr:nth-of-type(even)   td:nth-of-type(even)'
  *
- *  Если нужно больше примеров - можете посмотреть юнит тесты.
+ *  For more examples see unit tests.
  */
 
 const cssSelectorBuilder = {
-
     element: function(value) {
-        throw new Error('Not implemented');
+        let builder = new SelectorBuilder();
+        return builder.element(value);
     },
 
     id: function(value) {
-        throw new Error('Not implemented');
+        let builder = new SelectorBuilder();
+        return builder.id(value);
     },
 
     class: function(value) {
-        throw new Error('Not implemented');
+        let builder = new SelectorBuilder();
+        return builder.class(value);
     },
 
     attr: function(value) {
-        throw new Error('Not implemented');
+        let builder = new SelectorBuilder();
+        return builder.attr(value);
     },
 
     pseudoClass: function(value) {
-        throw new Error('Not implemented');
+        let builder = new SelectorBuilder();
+        return builder.pseudoClass(value);
     },
 
     pseudoElement: function(value) {
-        throw new Error('Not implemented');
+        let builder = new SelectorBuilder();
+        return builder.pseudoElement(value);
     },
 
     combine: function(selector1, combinator, selector2) {
-        throw new Error('Not implemented');
-    },
+        return selector1.chain(combinator, selector2);
+    }
 };
+
+// Said FREEZE wid da gun. He put da gun towards me an said FREEZE!
+// I said I neva FREEZE! And den I walked da wae.
+let stages = Object.freeze({
+    element: 0,
+    id: 1,
+    class: 2,
+    attr: 3,
+    pseudoClass: 4,
+    pseudoElement: 5
+});
+
+class SelectorBuilder {
+    constructor() {
+        this.stage = stages.element;
+        this.follow = [];
+        this.content = {
+            element: undefined,
+            id: undefined,
+            classes: [],
+            attributes: [],
+            pseudoClasses: [],
+            pseudoElement: undefined
+        };
+    }
+
+    element(value) {
+        if (this.stage > stages.element) {
+            throw new Error('Selector parts should be arranged in the following ' +
+                'order: element, id, class, attribute, pseudo-class, pseudo-element');
+        }
+
+        if (this.content.element === undefined) {
+            this.content.element = value;
+            return this;
+        } else {
+            throw new Error('Element, id and pseudo-element ' +
+                'should not occur more then one time inside the selector');
+        }
+    }
+
+    id(value) {
+        if (this.stage > stages.id) {
+            throw new Error('Selector parts should be arranged in the following ' +
+                'order: element, id, class, attribute, pseudo-class, pseudo-element');
+        }
+        this.stage = stages.id;
+
+        if (this.content.id === undefined) {
+            this.content.id = value;
+            return this;
+        } else {
+            throw new Error('Element, id and pseudo-element ' +
+                'should not occur more then one time inside the selector');
+        }
+    }
+
+    class(value) {
+        if (this.stage > stages.class) {
+            throw new Error('Selector parts should be arranged in the following ' +
+                'order: element, id, class, attribute, pseudo-class, pseudo-element');
+        }
+        this.stage = stages.class;
+
+        this.content.classes.push(value);
+        return this;
+    }
+
+    attr(value) {
+        if (this.stage > stages.attr) {
+            throw new Error('Selector parts should be arranged in the following ' +
+                'order: element, id, class, attribute, pseudo-class, pseudo-element');
+        }
+        this.stage = stages.attr;
+
+        this.content.attributes.push(value);
+        return this;
+    }
+
+    pseudoClass(value) {
+        if (this.stage > stages.pseudoClass) {
+            throw new Error('Selector parts should be arranged in the following ' +
+                'order: element, id, class, attribute, pseudo-class, pseudo-element');
+        }
+        this.stage = stages.pseudoClass;
+
+        this.content.pseudoClasses.push(value);
+        return this;
+    }
+
+    pseudoElement(value) {
+        if (this.stage > stages.pseudoElement) {
+            throw new Error('Selector parts should be arranged in the following ' +
+                'order: element, id, class, attribute, pseudo-class, pseudo-element');
+        }
+        this.stage = stages.pseudoElement;
+
+        if (this.content.pseudoElement === undefined) {
+            this.content.pseudoElement = value;
+            return this;
+        } else {
+            throw new Error('Element, id and pseudo-element ' +
+                'should not occur more then one time inside the selector');
+        }
+    }
+
+    stringify() {
+        return (this.content.element !== undefined ? this.content.element : '') +
+            (this.content.id !== undefined ? '#' + this.content.id : '') +
+            (this.content.classes.length ? '.' + this.content.classes.join('.') : '') +
+            (this.content.attributes.length ? this.content.attributes.map(elem => `[${elem}]`).join('') : '') +
+            (this.content.pseudoClasses.length ? ':' + this.content.pseudoClasses.join(':') : '') +
+            (this.content.pseudoElement !== undefined ? '::' + this.content.pseudoElement : '') +
+            (this.follow.length ?
+                this.follow.map(elem => ` ${elem.combinator} ` + elem.element.stringify()).join('') : '');
+    }
+
+    chain(combinator, chainable) {
+        this.follow.push({combinator: combinator, element: chainable});
+        return this;
+    }
+}
 
 
 module.exports = {

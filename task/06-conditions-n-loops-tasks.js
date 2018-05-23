@@ -2,7 +2,7 @@
 
 /**************************************************************************************************
  *                                                                                                *
- * Пожалуйста, прочтите информацию по ссылкам перед выполнением заданий:                                 *
+ * Plese read the following tutorial before implementing tasks:                                   *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling  *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration              *
  *                                                                                                *
@@ -10,11 +10,11 @@
 
 
 /**
- * Возврщает 'Fizz','Buzz' или начальное число согласно следеющим правилам:
- * 1) если не подпадает под следйющте правила вернуть начальное число
- * 2) число делится нацело на 3 вернуть 'Fizz'
- * 3) число кратно 5 вернуть 'Buzz'
- * 4) если число кратно 3 и 5 одновременно вернуть 'FizzBuzz'
+ * Returns the 'Fizz','Buzz' or an original number using the following rules:
+ * 1) return original number
+ * 2) but if number multiples of three return 'Fizz'
+ * 3) for the multiples of five return 'Buzz'
+ * 4) for numbers which are multiples of both three and five return 'FizzBuzz'
  *
  * @param {number} num
  * @return {any}
@@ -30,12 +30,12 @@
  *
  */
 function getFizzBuzz(num) {
-    throw new Error('Not implemented');
+    return !(num % 3) ? !(num % 5) ? 'FizzBuzz' : 'Fizz' : !(num % 5) ? 'Buzz' : num;
 }
 
 
 /**
- * Возвращает факториал переданного целого числа n.
+ * Returns the factorial of the specified integer n.
  *
  * @param {number} n
  * @return {number}
@@ -46,12 +46,12 @@ function getFizzBuzz(num) {
  *   10 => 3628800
  */
 function getFactorial(n) {
-    throw new Error('Not implemented');
+    return n < 1 ? 1 : n * getFactorial(n - 1);
 }
 
 
 /**
- * Возвращается сумму целых чисел в промежутке между переданными числами, включая их
+ * Returns the sum of integer numbers between n1 and n2 (inclusive).
  *
  * @param {number} n1
  * @param {number} n2
@@ -63,13 +63,17 @@ function getFactorial(n) {
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
 function getSumBetweenNumbers(n1, n2) {
-    throw new Error('Not implemented');
+    let sum = n1;
+    for (let i = n1 + 1; i <= n2; i++) {
+        sum += i;
+    }
+
+    return sum;
 }
 
 
 /**
- * Возвращает true, если с помощью трех переданных длин сторон a,b,c можно
- * посроить треугольник, если нет - false
+ * Returns true, if a triangle can be built with the specified sides a,b,c and false in any other ways.
  *
  * @param {number} a
  * @param {number} b
@@ -82,14 +86,14 @@ function getSumBetweenNumbers(n1, n2) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(a,b,c) {
-    throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+    return (a + b) > c && (a + c) > b && (b + c) > a;
 }
 
 
 /**
- * Возвращает true, если 2 определенных прямоуголника перекрываются, если нет false.
- * Каждый прямоуголник представлен обьектом
+ * Returns true, if two specified axis-aligned rectangles overlap, otherwise false.
+ * Each rectangle representing by object
  *  {
  *     top: 5,
  *     left: 5,
@@ -104,8 +108,8 @@ function isTriangle(a,b,c) {
  *     -------------
  *        width=20
  *
- * NOTE: Пожлауйтса используйте принцип задания координат для canvas (https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes#The_grid),
- * этот способ отличается от декартовой системы координат.
+ * NOTE: Please use canvas coordinate space (https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes#The_grid),
+ * it differs from Cartesian coordinate system.
  *
  * @param {object} rect1
  * @param {object} rect2
@@ -120,13 +124,18 @@ function isTriangle(a,b,c) {
  *
  */
 function doRectanglesOverlap(rect1, rect2) {
-    throw new Error('Not implemented');
+    return !(
+        rect1.left + rect1.width < rect2.left ||
+        rect2.left + rect2.width < rect1.left ||
+        rect1.top + rect1.height < rect2.top ||
+        rect2.top + rect2.height < rect1.top
+    );
 }
 
 
 /**
- * Возвращает true если точка лежим в пределах круга, если нет то false
- * Круг представляет собой объект:
+ * Returns true, if point lies inside the circle, otherwise false.
+ * Circle is an object of
  *  {
  *     center: {
  *       x: 5,
@@ -135,7 +144,7 @@ function doRectanglesOverlap(rect1, rect2) {
  *     radius: 20
  *  }
  *
- * Точка представляет собой объект:
+ * Point is object of
  *  {
  *     x: 5,
  *     y: 5
@@ -151,12 +160,17 @@ function doRectanglesOverlap(rect1, rect2) {
  *
  */
 function isInsideCircle(circle, point) {
-    throw new Error('Not implemented');
+    const diff = {
+        x: Math.abs(circle.center.x - point.x),
+        y: Math.abs(circle.center.y - point.y)
+    }
+
+    return Math.sqrt(diff.x * diff.x + diff.y * diff.y) < circle.radius;
 }
 
 
 /**
- * Возврщает первый неповторяющийся символ в строке, если его нет то возвращает null.
+ * Returns the first non repeated char in the specified strings otherwise returns null.
  *
  * @param {string} str
  * @return {string}
@@ -167,15 +181,21 @@ function isInsideCircle(circle, point) {
  *   'entente' => null
  */
 function findFirstSingleChar(str) {
-    throw new Error('Not implemented');
+    for (let i = 0; i < str.length; i++) {
+        if (str.indexOf(str[i]) == str.lastIndexOf(str[i])) {
+            return str[i];
+        }
+    }
+
+    return null;
 }
 
 
 /**
- * Возвращает интервальную строку по 2 определенным числам и (включить / исключить) критериям.
- * Подробное описание задачи: https://en.wikipedia.org/wiki/Interval_(mathematics)
+ * Returns the string representation of math interval, specified by two points and include / exclude flags.
+ * See the details: https://en.wikipedia.org/wiki/Interval_(mathematics)
  *
- * Обратите внимание на то, что меньшее число должно идти первым в описании
+ * Please take attention, that the smaller number should be the first in the notation
  *
  * @param {number} a
  * @param {number} b
@@ -188,17 +208,19 @@ function findFirstSingleChar(str) {
  *   0, 1, true, false  => '[0, 1)'
  *   0, 1, false, true  => '(0, 1]'
  *   0, 1, false, false => '(0, 1)'
- * меньшее число должно быть впереди :
+ * Smaller number has to be first :
  *   5, 3, true, true   => '[3, 5]'
  *
  */
 function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
-    throw new Error('Not implemented');
+    return (isStartIncluded ? '[' : '(') +
+        (a < b ? [a, b].join(', ') : [b, a].join(', ')) +
+        (isEndIncluded ? ']' : ')');
 }
 
 
 /**
- * Переворачивает переданную строку (ставит все символы строки в обратном порядке)
+ * Reverse the specified string (put all chars in reverse order)
  *
  * @param {string} str
  * @return {string}
@@ -210,12 +232,12 @@ function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
  * 'noon' => 'noon'
  */
 function reverseString(str) {
-    throw new Error('Not implemented');
+    return str.split('').reverse().join('');
 }
 
 
 /**
- * Переворачивает переданное целое число (ставит все цифры числа в обратном порядке)
+ * Reverse the specified integer number (put all digits in reverse order)
  *
  * @param {number} num
  * @return {number}
@@ -227,15 +249,15 @@ function reverseString(str) {
  *   34143 => 34143
  */
 function reverseInteger(num) {
-    throw new Error('Not implemented');
+    return parseInt(reverseString(num.toString()));
 }
 
 
 /**
- * Проверяет на валидность CCN (credit card number) и возвращает true если CCN валиден
- * и возвращает false в противном случае.
+ * Validates the CCN (credit card number) and return true if CCN is valid
+ * and false otherwise.
  *
- * Описание алгоритма по ссылке : https://en.wikipedia.org/wiki/Luhn_algorithm
+ * See algorithm here : https://en.wikipedia.org/wiki/Luhn_algorithm
  *
  * @param {number} cnn
  * @return {boolean}
@@ -252,14 +274,31 @@ function reverseInteger(num) {
  *   4916123456789012 => false
  */
 function isCreditCardNumber(ccn) {
-    throw new Error('Not implemented');
+    let strnum = ccn.toString();
+    let sum = 0;
+    let isEvenTurn = false;
+
+    for (let i = strnum.length - 1; i >= 0; i--) {
+        let digit = parseInt(strnum[i]);
+
+        if (isEvenTurn) {
+            if ((digit *= 2) > 9) {
+                digit -= 9;
+            }
+        }
+
+        sum += digit;
+        isEvenTurn = !isEvenTurn;
+    }
+
+    return !(sum % 10);
 }
 
 
 /**
- * Возвращает сумму всех цифр переданного чила след. образом:
- *   step1 : найти сумму всех цифр исходного числа
- *   step2 : если сумма на step1 больше 9 нужно проделать step1 с полученной суммой
+ * Returns the digital root of integer:
+ *   step1 : find sum of all digits
+ *   step2 : if sum > 9 then goto step1 otherwise return the sum
  *
  * @param {number} n
  * @return {number}
@@ -271,16 +310,21 @@ function isCreditCardNumber(ccn) {
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
 function getDigitalRoot(num) {
-    throw new Error('Not implemented');
+    const getDigitSum = (num) => num.toString().split('').map(Number).reduce((acc, elem) => acc + elem);
+
+    do {
+        num = getDigitSum(num);
+    } while (num > 9);
+
+    return num;
 }
 
 
 /**
- * Возвращает true если переданная строка представляет собой правильную скобочную
- * структура, если нет -false
- * Правильная скобочная структура состоит из соответствующих закрывающихся,
- * открывающихся фигурных скобок, стоящих на соответствующих местях.
- * Скобочная последовательность может содержать:  [],(),{},<>
+ * Returns true if the specified string has the balanced brackets and false otherwise.
+ * Balanced means that is, whether it consists entirely of pairs of opening/closing brackets
+ * (in that order), none of which mis-nest.
+ * Brackets include [],(),{},<>
  *
  * @param {string} str
  * @return {boolean}
@@ -298,13 +342,41 @@ function getDigitalRoot(num) {
  *   '{[(<{[]}>)]}' = true
  */
 function isBracketsBalanced(str) {
-    throw new Error('Not implemented');
+    const brackets = new Map([
+        ['[', ']'], ['(', ')'], ['{', '}'], ['<', '>']
+    ]);
+
+    function has(iterator, element) {
+        let current = iterator.next().value;
+        while (current !== undefined) {
+            if (current === element) {
+                return true;
+            }
+            current = iterator.next().value;
+        }
+
+        return false;
+    };
+
+    let stack = [];
+    for (let char of str) {
+        if (has(brackets.keys(), char)) {
+            stack.push(char);
+        } else if (has(brackets.values(), char)) {
+            let removed = stack.pop();
+            if (removed === undefined || brackets.get(removed) !== char) {
+                return false;
+            }
+        }
+    }
+
+    return stack.pop() === undefined;
 }
 
 
 /**
- * Возвращает строку, составленной на основе периода от переданного начала и конца периода
- * Конечная строка должна удовлетворять следующим правилам:
+ * Returns the human readable string of time period specified by the start and end time.
+ * The result string should be constrcuted using the folliwing rules:
  *
  * ---------------------------------------------------------------------
  *   Difference                 |  Result
@@ -334,12 +406,56 @@ function isBracketsBalanced(str) {
  *
  */
 function timespanToHumanString(startDate, endDate) {
-    throw new Error('Not implemented');
+    const msToSecs = (ms) => ms / 1000;
+    const msToMins = (ms) => ms / (1000 * 60);
+    const msToHours = (ms) => ms / (1000 * 60 * 60);
+    const msToDays = (ms) => ms / (1000 * 60 * 60 * 24);
+    const msToMonths = (ms) => ms / (1000 * 60 * 60 * 24 * 30);
+    const msToYears = (ms) => ms / (1000 * 60 * 60 * 24 * 30 * 12);
+
+    const altRound = (val) => Math.abs(Math.round(val) - val) == 0.5 ? Math.floor(val) : Math.round(val);
+
+    const period = endDate.getTime() - startDate.getTime();
+    switch (true) {
+        case (msToSecs(period) <= 45):
+            return 'a few seconds ago';
+            break;
+        case (msToSecs(period) <= 90):
+            return 'a minute ago';
+            break;
+        case (msToMins(period) <= 45):
+            return `${altRound(msToMins(period))} minutes ago`;
+            break;
+        case (msToMins(period) <= 90):
+            return 'an hour ago';
+            break;
+        case (msToHours(period) <= 22):
+            return `${altRound(msToHours(period))} hours ago`;
+            break;
+        case (msToHours(period) <= 36):
+            return 'a day ago';
+            break;
+        case (msToDays(period) <= 25):
+            return `${altRound(msToDays(period))} days ago`;
+            break;
+        case (msToDays(period) <= 45):
+            return 'a month ago';
+            break;
+        case (msToDays(period) <= 345):
+            return `${altRound(msToMonths(period))} months ago`;
+            break;
+        case (msToDays(period) <= 545):
+            return 'a year ago';
+            break;
+        default:
+            return `${altRound(msToYears(period))} years ago`;
+    }
 }
 
+
 /**
- * Вернуть строку с представление числа в n-ой (бинарной, десятичной, и т.д., где n<=10) системе исчисления.
- * Более подробное описание
+ * Returns the string with n-ary (binary, ternary, etc, where n<=10) representation of specified number.
+ * See more about
  * https://en.wikipedia.org/wiki/Binary_number
  * https://en.wikipedia.org/wiki/Ternary_numeral_system
  * https://en.wikipedia.org/wiki/Radix
@@ -357,12 +473,12 @@ function timespanToHumanString(startDate, endDate) {
  *    365, 10 => '365'
  */
 function toNaryString(num, n) {
-    throw new Error('Not implemented');
+    return num.toString(n);
 }
 
 
 /**
- * Возбращает общий путь к директории из всех путей переданных в массиве
+ * Returns the commom directory path for specified array of full filenames.
  *
  * @param {array} pathes
  * @return {string}
@@ -374,13 +490,25 @@ function toNaryString(num, n) {
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(pathes) {
-    throw new Error('Not implemented');
+    pathes.sort();
+
+    let lastDirDelimiter = -1;
+    for (let lastEqual = 0; lastEqual < pathes[0].length; lastEqual++) {
+        if (pathes[0][lastEqual] != pathes[pathes.length - 1][lastEqual]) {
+            break;
+        }
+        if (pathes[0][lastEqual] == '/') {
+            lastDirDelimiter = lastEqual;
+        }
+    }
+
+    return lastDirDelimiter == -1 ? '' : pathes[0].slice(0, lastDirDelimiter + 1);
 }
 
 
 /**
- * Возвращает произведение двух переданных матриц.
- * Более подробное описание: https://en.wikipedia.org/wiki/Matrix_multiplication
+ * Returns the product of two specified matrixes.
+ * See details: https://en.wikipedia.org/wiki/Matrix_multiplication
  *
  * @param {array} m1
  * @param {array} m2
@@ -397,17 +525,23 @@ function getCommonDirectoryPath(pathes) {
  *
  */
 function getMatrixProduct(m1, m2) {
-    throw new Error('Not implemented');
+    let product = new Array(m1.length).fill(0).map(row => new Array(m2[0].length).fill(0));
+
+    return product.map((row, i) =>
+        row.map((elem, j) =>
+            m1[i].reduce((acc, val, k) => acc + val * m2[k][j], 0)
+        )
+    );
 }
 
 
 /**
- * Возвращает результат игры крестики-нолики для текущих позиций 'X', 'O'
- * Более подробное описание: https://en.wikipedia.org/wiki/Tic-tac-toe
+ * Returns the evaluation of the specified tic-tac-toe position.
+ * See the details: https://en.wikipedia.org/wiki/Tic-tac-toe
  *
- * Позиции X и O представлены в виде матрицы 3x3 cо значениями: 'X','0', undefined
- * Функция должна возвращать победиля игры по текущей позиции.
- * Результат должен быть в виде: 'X' или '0' или undefined
+ * Position is provides as 3x3 array with the following values: 'X','0', undefined
+ * Function should return who is winner in the current position according to the game rules.
+ * The result can be: 'X','0',undefined
  *
  * @param {array} position
  * @return {string}
@@ -432,7 +566,43 @@ function getMatrixProduct(m1, m2) {
  *
  */
 function evaluateTicTacToePosition(position) {
-    throw new Error('Not implemented');
+    const field = {cols: 3, rows: 3};
+
+    let rowWinners = Array.from({length: field.rows},
+        (elem, index) => position[index][0] !== '' ? position[index][0] : undefined);
+    let colWinners = Array.from({length: field.cols},
+        (elem, index) => position[0][index] !== '' ? position[0][index] : undefined);
+    let primaryDgWinner = position[0][0] !== '' ? position[0][0] : undefined;
+    let secondaryDgWinner = position[0][position[0].length - 1] !== '' ?
+        position[0][position[0].length - 1] : undefined;
+
+    for (let row = 0; row < field.rows; row++) {
+        for (let col = 0; col < field.cols; col++) {
+            if (rowWinners[row] !== undefined && rowWinners[row] !== position[row][col]) {
+                rowWinners[row] = undefined;
+            }
+            if (colWinners[col] !== undefined && colWinners[col] !== position[row][col]) {
+                colWinners[col] = undefined;
+            }
+
+            if (row == col && primaryDgWinner !== undefined) {
+                if (primaryDgWinner !== position[row][col]) {
+                    primaryDgWinner = undefined;
+                }
+            }
+            if (row == field.rows - col - 1 && secondaryDgWinner !== undefined) {
+                if (secondaryDgWinner !== position[row][col]) {
+                    secondaryDgWinner = undefined;
+                }
+            }
+        }
+    }
+
+    return primaryDgWinner !== undefined ? primaryDgWinner :
+        secondaryDgWinner !== undefined ? secondaryDgWinner :
+            rowWinners.indexOf('X') != -1 ? 'X' : rowWinners.indexOf('0') != -1 ? '0' :
+                colWinners.indexOf('X') != -1 ? 'X' : colWinners.indexOf('0') != -1 ? '0' :
+                    undefined;
 }
 
 

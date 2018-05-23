@@ -2,7 +2,7 @@
 
 /********************************************************************************************
  *                                                                                          *
- * Докуметация к прочтению перед выполнением задания:                             *
+ * Plese read the following tutorial before implementing tasks:                             *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Numbers_and_dates          *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number  *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math    *
@@ -11,9 +11,9 @@
 
 
 /**
- * Возвращает площадь прямоугольника при передаче ширины и высоты.
+ * Returns an area of a rectangle given by width and height.
  *
- * @param {numder} width
+ * @param {number} width
  * @param {number} height
  * @return {number}
  *
@@ -22,12 +22,12 @@
  *   5, 5  => 25
  */
 function getRectangleArea(width, height) {
-    throw new Error('Not implemented');
+    return width * height;
 }
 
 
 /**
- * Возвращает окружность круга, заданную радиусом.
+ * Returns a circumference of circle given by radius.
  *
  * @param {number} radius
  * @return {number}
@@ -38,13 +38,13 @@ function getRectangleArea(width, height) {
  *   0    => 0
  */
 function getCicleCircumference(radius) {
-    throw new Error('Not implemented');
+    return 2 * Math.PI * radius;
 }
 
 /**
- * Возвращает среднее значение двух заданных чисел.
+ * Returns an average of two given numbers.
  *
- * @param {numder} value1
+ * @param {number} value1
  * @param {number} value2
  * @return {number}
  *
@@ -54,11 +54,11 @@ function getCicleCircumference(radius) {
  *  -3, 3  => 0
  */
 function getAverage(value1, value2) {
-    throw new Error('Not implemented');
+    return value1 / 2 + value2 / 2;
 }
 
 /**
- * Возвращает расстояние между двумя точками по декартовым координатам.
+ * Returns a distance between two points by cartesian coordinates.
  *
  * @param {number} x1
  * @param {number} y1
@@ -73,11 +73,13 @@ function getAverage(value1, value2) {
  *   (-5,0) (10,-10) => 18.027756377319946
  */
 function getDistanceBetweenPoints(x1, y1, x2, y2) {
-    throw new Error('Not implemented');
+    return Math.sqrt(
+        Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1 - y2), 2)
+    );
 }
 
 /**
- * Возвращает корень линейного уравнения a * x + b = 0, при заданных коэффициентах a и b.
+ * Returns a root of linear equation a*x + b = 0 given by coefficients a and b.
  *
  * @param {number} a
  * @param {number} b
@@ -89,13 +91,13 @@ function getDistanceBetweenPoints(x1, y1, x2, y2) {
  *   5*x = 0         => 0
  */
 function getLinearEquationRoot(a, b) {
-    throw new Error('Not implemented');
+    return -b / a;
 }
 
 
 /**
- * Возвращает угол (в радианах) между двумя векторами, заданными значениями xi и yi в декартовой системе координат
- * Подробнее https://en.wikipedia.org/wiki/Euclidean_vector#Representations
+ * Returns an angle (in radians) between two vectors given by xi and yi, coordinates in Cartesian plane
+ * See details https://en.wikipedia.org/wiki/Euclidean_vector#Representations
  *
  * @param {number} x1
  * @param {number} y1
@@ -111,11 +113,13 @@ function getLinearEquationRoot(a, b) {
  *   (0,1) (1,2)     => 0
  */
 function getAngleBetweenVectors(x1, y1, x2, y2) {
-    throw new Error('Not implemented');
+    return Math.acos(
+        (x1 * x2 + y1 * y2) / (Math.sqrt(x1 * x1 + y1 * y1) * Math.sqrt(x2 * x2 + y2 * y2))
+    );
 }
 
 /**
- * Возвращает последнюю цифру целого числа.
+ * Returns a last digit of a integer number.
  *
  * @param {number} value
  * @return {number}
@@ -127,12 +131,12 @@ function getAngleBetweenVectors(x1, y1, x2, y2) {
  *     0     => 0
  */
 function getLastDigit(value) {
-    throw new Error('Not implemented');
+    return value % 10;
 }
 
 
 /**
- * Возвращает число, первоначально заданное строкой.
+ * Returns a number by given string representation.
  *
  * @param {string} value
  * @return {number}
@@ -143,11 +147,11 @@ function getLastDigit(value) {
  * '-525.5'     => -525.5
  */
 function parseNumberFromString(value) {
-    throw new Error('Not implemented');
+    return Number.parseFloat(value);
 }
 
 /**
- * Возвращает длину диагонали прямоугольного параллелепипеда, заданного сторонами a, b, c.
+ * Returns a diagonal length of the rectangular parallelepiped given by its sides a,b,c.
  *
  * @param {number} a
  * @param {number} b
@@ -159,17 +163,17 @@ function parseNumberFromString(value) {
  *   3,3,3   => 5.196152422706632
  *   1,2,3   => 3.741657386773941
  */
-function getParallelipidedDiagonal(a, b, c) {
-    throw new Error('Not implemented');
+function getParallelipidedDiagonal(a,b,c) {
+    return Math.sqrt(a * a + b * b + c * c);
 }
 
 /**
- * Возвращает число, округленное до заданного десятка.
+ * Returns the number rounded to specified power of 10.
  *
  * @param {number} num
  * @param {number} pow
  * @return {number}
- *  
+ *
  * @example:
  *   1234, 0  => 1234
  *   1234, 1  => 1230
@@ -181,16 +185,16 @@ function getParallelipidedDiagonal(a, b, c) {
  *   1678, 3  => 2000
  */
 function roundToPowerOfTen(num, pow) {
-    throw new Error('Not implemented');
+    return Math.round(num / Math.pow(10, pow)) * Math.pow(10, pow);
 }
 
 /**
- * Возвращает true, если число является простым, иначе - false.
- * Смотри: https://en.wikipedia.org/wiki/Primality_test
+ * Returns true is the number is prime; otherwise false.
+ * See: https://en.wikipedia.org/wiki/Primality_test
  *
  * @param {number} n
  * @return {bool}
- * 
+ *
  * @example:
  *   4 => false
  *   5 => true
@@ -202,12 +206,27 @@ function roundToPowerOfTen(num, pow) {
  *   17 => true
  */
 function isPrime(n) {
-    throw new Error('Not implemented');
+    if (n <= 1) {
+        return false;
+    } else if (n <= 3) {
+        return true;
+    } else if (!(n % 2) || !(n % 3)) {
+        return false;
+    }
+
+    let i = 5;
+    while (i * i <= n) {
+        if (!(n % i) || !(n % (i + 2))) {
+            return false;
+        }
+        i += 6;
+    }
+    return true;
 }
 
 /**
- * Пытается преобразовать первый агумент функции в число и возвращает его, если конвертация была успешной;
- * в противном случае возвращает значение второго аргумента.
+ * Tries to convert value to number and returns it if conversion was successfull;
+ * otherwise returns default value passed as a second argument.
  *
  * @param {any} value
  * @param {any} def
@@ -221,7 +240,7 @@ function isPrime(n) {
  *   toNumber(new Number(42), 0) => 42
  */
 function toNumber(value, def) {
-    throw new Error('Not implemented');
+    return +value ? +value : def;
 }
 
 module.exports = {
